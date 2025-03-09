@@ -1,44 +1,41 @@
 # Centralized Computing System (CCS) Server
 
 ## Overview
-The **Centralized Computing System (CCS) Server** is a multi-threaded server designed to handle:
-- **Service Discovery** (via UDP)
-- **Client Computation Requests** (via TCP)
-- **Periodic Statistics Reporting**
+The **Centralized Computing System (CCS) Server** is a high-performance, multi-threaded server designed for **distributed computation**. It enables seamless **service discovery**, **client-server communication**, and **real-time statistics reporting**. The system operates using **UDP for service discovery** and **TCP for computation requests**, allowing multiple clients to connect and execute operations efficiently.
 
 ## Features
-- **Service Discovery**: Enables clients to find the CCS server on a local network.
-- **Client Communication**: Supports multiple concurrent connections for arithmetic computations.
-- **Statistics Reporting**: Displays server activity statistics every 10 seconds.
-- **Error Handling**: Ensures network stability and handles invalid requests gracefully.
+- **Service Discovery**: Clients can discover the CCS server dynamically over a local network via **UDP broadcasting**.
+- **Client Communication**: Supports **multiple concurrent connections** for executing arithmetic computations using a **thread pool**.
+- **Statistics Reporting**: Automatically tracks **client activity and computational requests** and reports statistics **every 10 seconds**.
+- **Robust Error Handling**: Ensures network stability by handling **invalid requests**, **disconnections**, and **division by zero gracefully**.
 
 ---
 
 ## Functionalities
 ### 1. Service Discovery
-- Uses a **broadcast mechanism** to allow clients to discover the CCS server.
-- Listens for UDP discovery messages (`CCS DISCOVER`) and responds with `CCS FOUND`.
-- Ignores malformed or invalid discovery messages.
+- Implements a **broadcast mechanism** to allow clients to locate the CCS server.
+- Listens for **UDP service discovery messages (`CCS DISCOVER`)** and responds with `CCS FOUND`.
+- **Invalid discovery messages** are ignored to prevent errors.
 
 ### 2. Client Communication
-- Supports arithmetic operations:
+- Supports the following **arithmetic operations**:
   - **Addition (ADD)**
   - **Subtraction (SUB)**
   - **Multiplication (MUL)**
   - **Division (DIV)**
-- Clients send requests in the format: 
+- Clients send requests using the format:
   ```plaintext
   <OPER> <ARG1> <ARG2>
   ```
-- Handles multiple clients **concurrently** using a thread pool.
+- Handles **multiple simultaneous client requests** using **multi-threading**.
 
 ### 3. Statistics Reporting
-- Maintains and reports statistics **every 10 seconds**, including:
-  - Number of connected clients
-  - Count of computed requests (ADD, SUB, MUL, DIV)
-  - Count of incorrect operations
-  - Sum of all computation results
-- Uses a dedicated **scheduler thread** for periodic reporting.
+- Automatically logs system activity **every 10 seconds**, displaying:
+  - Total **connected clients**
+  - **Count of processed operations** (ADD, SUB, MUL, DIV)
+  - **Number of invalid operations**
+  - **Sum of computed results**
+- Uses a **dedicated scheduler thread** for efficient reporting.
 
 ---
 
@@ -48,7 +45,10 @@ The **Centralized Computing System (CCS) Server** is a multi-threaded server des
    git clone <repository_url>
    cd <repository_directory>
    ```
-2. **Compile the project** (if applicable).
+2. **Compile the project** (if applicable):
+   ```sh
+   javac CCS.java
+   ```
 3. **Run the CCS server** specifying a port:
    ```sh
    java CCS <port>
@@ -58,7 +58,7 @@ The **Centralized Computing System (CCS) Server** is a multi-threaded server des
 
 ## Methods & Implementation
 ### `CCS(int port)`
-- Initializes the server and **tracks statistics**.
+- Initializes the server and sets up **data structures for statistics tracking**.
 
 ### `void start()`
 - Starts the **UDP listener, TCP server**, and statistics reporting thread.
@@ -67,7 +67,7 @@ The **Centralized Computing System (CCS) Server** is a multi-threaded server des
 - Handles **service discovery** requests over UDP.
 
 ### `void startTCPServer()`
-- Manages **client connections** and creates **threads for handling requests**.
+- Accepts **client connections** and assigns them to available threads for processing.
 
 ### `void handleClient(Socket clientSocket)`
 - Processes **client computation requests** and updates statistics.
@@ -76,20 +76,20 @@ The **Centralized Computing System (CCS) Server** is a multi-threaded server des
 - Executes the requested **arithmetic operation** and returns the result.
 
 ### `void reportStatistics()`
-- Prints **global and last-10-second statistics**.
+- Prints **global statistics** and **last-10-second statistics**.
 
 ### `void changeStats(Stats stat, int value)`
-- Modifies a **specific statistic safely**.
+- Updates a specific **statistical metric safely**.
 
 ### `void incrementStats(Stats stat)`
-- Increments a **specific statistic by 1**.
+- Increments a specific statistic by 1.
 
 ---
 
 ## Error Handling
-- **Invalid UDP discovery messages** are ignored.
-- **Client disconnections** are handled gracefully.
-- **Exceptions** like division by zero and malformed requests are caught and logged.
+- **Malformed UDP discovery messages** are ignored.
+- **Handles client disconnections** gracefully to prevent crashes.
+- **Catches and logs exceptions**, such as division by zero and invalid input formats.
 
 ---
 
@@ -100,6 +100,8 @@ The **Centralized Computing System (CCS) Server** is a multi-threaded server des
 
 ## Contributors
 - **Author:** Dana Nazarchuk
-- Project is designed as a school project in Polish Japanese Academy of Information Technologies
+- Developed as a **school project at the Polish-Japanese Academy of Information Technologies**.
 
+## Additional Information
+The **CCS Server** demonstrates a **distributed computing architecture**, showcasing expertise in **multi-threading, network programming, and system monitoring**. This project can be extended with additional computation capabilities, security enhancements, or performance optimizations.
 
